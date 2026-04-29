@@ -37,7 +37,7 @@ Services (access via 192.168.x.x or Tailscale IP):
   Portainer:      :9000
   N8N:            :5678
   Home Assistant: :8123
-  Homepage:       :3000
+  Homepage:       :2000
 ```
 
 ## Architecture

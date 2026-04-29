@@ -46,13 +46,13 @@ services:
     container_name: homepage
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "2000:2000"
     volumes:
       - homepage_config:/app/config
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
       - TZ=Asia/Dhaka
-      - HOMEPAGE_ALLOWED_HOSTS=192.168.x.x:3000 # Add tailscale IP too: 100.x.x.x:3000
+      - HOMEPAGE_ALLOWED_HOSTS=192.168.x.x:2000 # Add tailscale IP too: 100.x.x.x:2000
 
 volumes:
   n8n_data:
@@ -89,7 +89,7 @@ volumes:
 | Setting | Value                     |
 | ------- | ------------------------- |
 | Port    | 3000                      |
-| Access  | `http://192.168.x.x:3000` |
+| Access  | `http://192.168.x.x:2000` |
 
 - `HOMEPAGE_ALLOWED_HOSTS` — Homepage validates the Host header for security. You must list every IP:port you'll use to access it, separated by commas. Add your Tailscale IP here too.
 - `/var/run/docker.sock:ro` — read-only access to Docker so Homepage can show container status

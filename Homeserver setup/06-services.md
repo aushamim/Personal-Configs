@@ -102,11 +102,28 @@ volumes:
   speedtest_config:
 ```
 
-> ⚠️ **Never hardcode secrets in compose files.** Use a `.env` file alongside the compose file and add `.env` to `.gitignore`. See the secrets section below.
+> ⚠️ **Never hardcode secrets in compose files.** See the secrets section below for how to handle them safely.
 
 ## Secrets Management
 
-Store sensitive values in a `.env` file, never in the compose file directly.
+There are two ways to manage secrets depending on how you deploy:
+
+### Option A: Portainer Environment Variables (recommended when using Portainer UI)
+
+Portainer does **not** read `.env` files from disk automatically. Instead, scroll to the bottom of the stack editor — there is an **Environment variables** section. Add each secret as a key-value pair there.
+
+Portainer stores these securely and injects them into the stack at deploy time. Your compose file can then reference them as `${VARIABLE_NAME}` without containing the actual values.
+
+| Key | Value |
+|---|---|
+| `HOMEPAGE_VAR_ADGUARD_USER` | your AdGuard username |
+| `HOMEPAGE_VAR_ADGUARD_PASS` | your AdGuard password |
+| `HOMEPAGE_VAR_SPEEDTEST_KEY` | your Speedtest API key |
+| `SPEEDTEST_APP_KEY` | your generated base64 key |
+
+### Option B: .env file (when managing via terminal)
+
+If you manage the stack via terminal instead of Portainer, Docker Compose automatically reads a `.env` file in the same directory as `docker-compose.yml`.
 
 Create `/opt/homeserver/.env`:
 
@@ -117,13 +134,18 @@ HOMEPAGE_VAR_SPEEDTEST_KEY=your_speedtest_api_key
 SPEEDTEST_APP_KEY=base64:your_generated_key
 ```
 
-Add to `.gitignore`:
+Then deploy with:
+
+```bash
+cd /opt/homeserver
+docker compose up -d
+```
+
+Add `.env` to `.gitignore` so it never gets committed:
 
 ```
 .env
 ```
-
-Portainer stacks support `.env` files — paste the env values in the **Environment variables** section at the bottom of the stack editor instead of the compose file.
 
 ---
 

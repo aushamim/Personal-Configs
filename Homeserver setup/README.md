@@ -24,20 +24,24 @@ A complete guide to setting up a home server on a laptop using Proxmox VE, Docke
 | [05-portainer.md](05-portainer.md)                       | Setting up Portainer for Docker management    |
 | [06-services.md](06-services.md)                         | Deploying N8N, Home Assistant, Homepage       |
 | [07-laptop-optimizations.md](07-laptop-optimizations.md) | Power, lid, and sleep optimizations           |
+| [08-adguard.md](08-adguard.md)                           | AdGuard Home DNS ad blocking setup            |
+| [09-speedtest-tracker.md](09-speedtest-tracker.md)       | Speedtest Tracker for internet monitoring     |
 
 ## Network Map
 
 ```
-Proxmox Host:     192.168.x.x  (WiFi)
+Proxmox Host:     192.168.x.x    (WiFi)
 Tailscale IP:     100.x.x.x
 Docker LXC:       10.10.10.2     (internal NAT)
 
 Services (access via 192.168.x.x or Tailscale IP):
-  Proxmox UI:     :8006
-  Portainer:      :9000
-  N8N:            :5678
-  Home Assistant: :8123
-  Homepage:       :2000
+  Proxmox UI:         :8006
+  Portainer:          :9000
+  N8N:                :5678
+  Home Assistant:     :8123
+  Homepage:           :2000
+  AdGuard Home:       :3001
+  Speedtest Tracker:  :8765
 ```
 
 ## Architecture
@@ -46,9 +50,20 @@ Services (access via 192.168.x.x or Tailscale IP):
 Bare Metal (Laptop)
 └── Proxmox VE
     ├── LXC: docker (10.10.10.2)
-    │   ├── Portainer      :9000
-    │   ├── N8N            :5678
-    │   ├── Home Assistant :8123
-    │   └── Homepage       :3000
+    │   ├── Portainer          :9000  (standalone, separate compose)
+    │   ├── N8N                :5678
+    │   ├── Home Assistant     :8123
+    │   ├── Homepage           :2000
+    │   ├── AdGuard Home       :3001  (DNS on :53)
+    │   └── Speedtest Tracker  :8765
     └── (future) VM: Ubuntu Desktop
 ```
+
+## Planned Future Services
+
+| Service     | Port | Purpose               |
+| ----------- | ---- | --------------------- |
+| Syncthing   | 8384 | File sync from main PC |
+| Immich      | 2283 | Family photo backup   |
+| qBittorrent | 8080 | Torrent downloads     |
+| Jellyfin    | 8096 | Local media streaming |
